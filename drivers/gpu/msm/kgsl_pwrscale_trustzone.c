@@ -157,6 +157,49 @@ static void tz_wake(struct kgsl_device *device, struct kgsl_pwrscale *pwrscale)
 	return;
 }
 
+#ifdef CONFIG_MSM_KGSL_SIMPLE_GOV
+/* KGSL Simple GPU Governor */
+/* Copyright (c) 2011-2013, Paul Reioux (Faux123). All rights reserved. */
+static int default_laziness = 5;
+module_param_named(simple_laziness, default_laziness, int, 0664);
+
+static int ramp_up_threshold = 6000;
+module_param_named(simple_ramp_threshold, ramp_up_threshold, int, 0664);
+
+static int laziness;
+
+static int simple_governor(struct kgsl_device *device, int idle_stat)
+{
+	int val = 0;
+	struct kgsl_pwrctrl *pwr = &device->pwrctrl;
+
+	/* it's currently busy */
+	if (idle_stat < ramp_up_threshold) {
+		if (pwr->active_pwrlevel == 0)
+			val = 0; /* already maxed, so do nothing */
+		else if ((pwr->active_pwrlevel > 0) &&
+			(pwr->active_pwrlevel <= (pwr->num_pwrlevels - 1)))
+			val = -1; /* bump up to next pwrlevel */
+	/* idle case */
+	} else {
+		if ((pwr->active_pwrlevel >= 0) &&
+			(pwr->active_pwrlevel < (pwr->num_pwrlevels - 1)))
+			if (laziness > 0) {
+				/* hold off for a while */
+				laziness--;
+				val = 0; /* don't change anything yet */
+			} else {
+				val = 1; /* above min, lower it */
+				/* reset laziness count */
+				laziness = default_laziness;
+			}
+		else if (pwr->active_pwrlevel == (pwr->num_pwrlevels - 1))
+			val = 0; /* already @ min, so do nothing */
+	}
+	return val;
+}
+#endif
+
 static void tz_idle(struct kgsl_device *device, struct kgsl_pwrscale *pwrscale)
 {
 	struct kgsl_pwrctrl *pwr = &device->pwrctrl;
