@@ -3389,7 +3389,7 @@ out:
 	return netif_receive_skb(skb);
 }
 
-inline void napi_gro_flush(struct napi_struct *napi)
+void napi_gro_flush(struct napi_struct *napi)
 {
 	struct sk_buff *skb, *next;
 

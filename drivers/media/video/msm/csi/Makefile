@@ -1,4 +1,4 @@
-GCC_VERSION      := $(shell $(CONFIG_SHELL) $(PWD)/scripts/gcc-version.sh $(CROSS_COMPILE)gcc)
+GCC_VERSION      := $(shell $(CONFIG_SHELL) $(srctree)/scripts/gcc-version.sh $(CROSS_COMPILE)gcc)
 ccflags-y += -Idrivers/media/video/msm
 ifeq ($(CONFIG_MSM_CSI20_HEADER),y)
   ccflags-y += -Idrivers/media/video/msm/csi/include/csi2.0

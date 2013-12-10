@@ -1,4 +1,4 @@
-GCC_VERSION      := $(shell $(CONFIG_SHELL) $(PWD)/scripts/gcc-version.sh $(CROSS_COMPILE)gcc)
+GCC_VERSION      := $(shell $(CONFIG_SHELL) $(srctree)/scripts/gcc-version.sh $(CROSS_COMPILE)gcc)
 
 ccflags-y += -Idrivers/media/video/msm/io
 ccflags-y += -Idrivers/media/video/msm/vfe

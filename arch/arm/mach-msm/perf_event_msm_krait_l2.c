@@ -66,6 +66,10 @@
 
 #define	RESRX_VALUE_EN	0x80000000
 
+#ifndef CONFIG_HW_PERF_EVENTS
+#error "CONFIG_HW_PERF_EVENTS is undefined but is required"
+#endif
+
 /*
  * The L2 PMU is shared between all CPU's, so protect
  * its bitmap access.
