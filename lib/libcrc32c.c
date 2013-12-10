@@ -43,7 +43,7 @@ u32 crc32c(u32 crc, const void *address, unsigned int length)
 {
 	struct {
 		struct shash_desc shash;
-		char ctx[crypto_shash_descsize(tfm)];
+		char ctx[4];
 	} desc;
 	int err;
 

@@ -3,6 +3,8 @@
  *
  * 'entries' and 'term' are never anywhere referenced by word in code. In fact,
  * they serve as the hanging-off data accessed through repl.data[].
+ * The order or the last two elements in the struct can be changed because only
+ * the size matters since the structure members are not referenced. 
  */
 
 #define xt_alloc_initial_table(type, typ2) ({ \
@@ -11,9 +13,10 @@
 	unsigned int bytes = 0, hooknum = 0, i = 0; \
 	struct { \
 		struct type##_replace repl; \
-		struct type##_standard entries[nhooks]; \
 		struct type##_error term; \
 	} *tbl = kzalloc(sizeof(*tbl), GFP_KERNEL); \
+        struct type##_standard entries[0]; \
+        } *tbl = kzalloc(sizeof(*tbl)+nhooks*sizeof(struct type##_standard), GFP_KERNEL); \
 	if (tbl == NULL) \
 		return NULL; \
 	strncpy(tbl->repl.name, info->name, sizeof(tbl->repl.name)); \
