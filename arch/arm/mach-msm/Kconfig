@@ -1636,8 +1636,22 @@ endif # CPU_FREQ_MSM
 config USERSPACE_VOLTAGE_CONTROL
 	bool "Enable Userspace CPU Voltage Control"
 	default y
-	help
+        help
 	  Userspace Voltage Control
+
+
+config INTELLI_PLUG
+	bool "Enable intelli-plug cpu hotplug driver"
+	default n
+	help
+	  Generic Intelli-plug cpu hotplug driver for ARM SOCs
+
+
+config MSM_CPUFREQ_LIMITER
+	tristate "MSM CPU frequency limiter"
+	default n
+        help
+
 
 config GPU_OVERCLOCK
 	bool "Enable GPU Overclocking option"
